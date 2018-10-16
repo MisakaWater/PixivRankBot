@@ -1,0 +1,11 @@
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\bin\Release\netcoreapp2.1\PixIvRankBot.deps.json
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\bin\Release\netcoreapp2.1\PixIvRankBot.runtimeconfig.json
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\bin\Release\netcoreapp2.1\PixIvRankBot.runtimeconfig.dev.json
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\bin\Release\netcoreapp2.1\PixIvRankBot.dll
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\bin\Release\netcoreapp2.1\PixIvRankBot.pdb
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.csprojAssemblyReference.cache
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.csproj.CoreCompileInputs.cache
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.AssemblyInfoInputs.cache
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.AssemblyInfo.cs
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.dll
+C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Release\netcoreapp2.1\PixIvRankBot.pdb
