@@ -3931,11 +3931,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Misak\\source\\repos\\PixIvRankBot\\PixIvRankBot\\PixIvRankBot.csproj",
+      "projectUniqueName": "C:\\Users\\Misak\\Source\\Repos\\MisakaWater\\PixivRankBot\\PixIvRankBot\\PixIvRankBot.csproj",
       "projectName": "PixIvRankBot",
-      "projectPath": "C:\\Users\\Misak\\source\\repos\\PixIvRankBot\\PixIvRankBot\\PixIvRankBot.csproj",
+      "projectPath": "C:\\Users\\Misak\\Source\\Repos\\MisakaWater\\PixivRankBot\\PixIvRankBot\\PixIvRankBot.csproj",
       "packagesPath": "C:\\Users\\Misak\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Misak\\source\\repos\\PixIvRankBot\\PixIvRankBot\\obj\\",
+      "outputPath": "C:\\Users\\Misak\\Source\\Repos\\MisakaWater\\PixivRankBot\\PixIvRankBot\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
