@@ -1,26 +1,47 @@
-﻿using Newtonsoft.Json.Linq;
-using PixivRankBot;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Web;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
-namespace PixIvRankBot
+namespace PixivRankBot
 {
     class Monitor
     {
         /// <summary>
         /// 初始化监听器
         /// </summary>
-        void MonitorInit()
+        public async void MonitorInit()
         {
             Console.WriteLine("MonitorInit()");
             CQ cq = new CQ();
-            string post_url = cq.GetHttpApiConfig(cq.RunTimePath(), Key: "post_url");
-            MonitorPost(post_url);
+
+            string Path = cq.RunTimePath();
+            string post_url;
+            if (Path == null)
+            {
+                Console.WriteLine("没有启动酷Q!请启动!");
+                return;
+            }
+            else
+            {
+                post_url = cq.GetHttpApiConfig(Path, Key: "post_url");
+            }
+
+            if (post_url == null)
+            {
+                Console.WriteLine("请设置HttpApi的Post_Url，配置文件位于:CQ根目录\\app\\io.github.richardchien.coolqhttpapi\\config\\登陆的QQ号.json");
+                return;
+            }
+            else
+            {
+                await Task.Run(() => {
+                    MonitorPost(post_url);
+                });
+                
+            }
         }
         /// <summary>
         /// 启动监视器
@@ -59,35 +80,22 @@ namespace PixIvRankBot
 
             ctx.Response.StatusCode = 200;//设置返回给客服端http状态代码
 
-            //接收Get参数
-            string type = ctx.Request.QueryString["type"];
-            string userId = ctx.Request.QueryString["userId"];
-            string password = ctx.Request.QueryString["password"];
-            string filename = Path.GetFileName(ctx.Request.RawUrl);
-            string userName = HttpUtility.ParseQueryString(filename).Get("userName");//避免中文乱码
-            //进行处理
-            Console.WriteLine("收到数据:" + userName);
-
             //接收POST参数
             Stream stream = ctx.Request.InputStream;
-            System.IO.StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8);
-            String body = reader.ReadToEnd();
-            Console.WriteLine("收到POST数据:" + HttpUtility.UrlDecode(body));
-            Console.WriteLine("解析:" + HttpUtility.ParseQueryString(body).Get("userName"));
-
+            StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8);
+            string body = reader.ReadToEnd();
         }
 
-        //https://cqhttp.cc/docs/4.5/#/Post?id=上报和回复中的数据类型
-
         /// <summary>
-        /// 获取消息类型
+        /// 读取消息Json
         /// </summary>
         /// <param name="json">传入json</param>
-        /// <returns>消息类型 </returns>
-        string GetMsgType(string json)
+        /// <param name="key">Json中的Key</param>
+        /// <returns>key对应的值</returns>
+        string GetMsgType(string key,string Json)
         {
-            JObject jObject = JObject.Parse(json);
-            return (string)jObject["message_type"];
+            JObject jObject = JObject.Parse(Json);
+            return (string)jObject[key];
         }
     }
 }

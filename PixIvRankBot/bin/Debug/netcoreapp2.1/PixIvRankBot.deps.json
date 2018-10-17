@@ -6,13 +6,13 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "PixIvRankBot/1.0.0": {
+      "PixivRankBot/1.0.0": {
         "dependencies": {
           "HtmlAgilityPack": "1.8.9",
           "Newtonsoft.Json": "11.0.2"
         },
         "runtime": {
-          "PixIvRankBot.dll": {}
+          "PixivRankBot.dll": {}
         }
       },
       "HtmlAgilityPack/1.8.9": {
@@ -617,7 +617,7 @@
     }
   },
   "libraries": {
-    "PixIvRankBot/1.0.0": {
+    "PixivRankBot/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1010,7 +1010,7 @@
     "System.Xml.XPath.XmlDocument/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-A/uxsWi/Ifzkmd4ArTLISMbfFs6XpRPsXZonrIqyTY70xi8t+mDtvSM5Os0RqyRDobjMBwIDHDL4NOIbkDwf7A==",
+      "sha512": "sha512-91tvfHWHSrYFPolCwWYqbpo1YaoBUCQ3uNZ/O/zr0ev5BnkoATJoie16ywlMVUaXZtfSfNELxhtG3aqpTfwR4w==",
       "path": "system.xml.xpath.xmldocument/4.3.0",
       "hashPath": "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512"
     }

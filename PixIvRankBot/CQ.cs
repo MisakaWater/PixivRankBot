@@ -122,14 +122,14 @@ namespace PixivRankBot
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path);
                 FileInfo[] files = directoryInfo.GetFiles();
-                Path = Path + files[0];
+                Path = Path + files[0].Name;
             }
             else
             {
                 Path = Path + FileName;
             }
             
-            if (Directory.Exists(Path))//找cq配置文件目录
+            if (File.Exists(Path))//找cq配置文件
             {
                 StreamReader file = File.OpenText(Path);
                 JObject jObject = JObject.Parse(file.ReadToEnd());

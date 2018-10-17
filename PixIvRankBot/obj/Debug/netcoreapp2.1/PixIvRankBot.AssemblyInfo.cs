@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("PixIvRankBot")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("PixivRankBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("PixIvRankBot")]
-[assembly: System.Reflection.AssemblyTitleAttribute("PixIvRankBot")]
+[assembly: System.Reflection.AssemblyProductAttribute("PixivRankBot")]
+[assembly: System.Reflection.AssemblyTitleAttribute("PixivRankBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // 由 MSBuild WriteCodeFragment 类生成。

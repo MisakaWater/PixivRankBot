@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace PixivRankBot
 {
     class Program
@@ -10,9 +11,13 @@ namespace PixivRankBot
             Main main = new Main();
             Init init = new Init();
 
+
             Api api = new Api();
+            Monitor monitor = new Monitor();
             if (args != null)
             {
+                monitor.MonitorInit();
+
                 main.Start(args);
             }
 
@@ -29,6 +34,9 @@ namespace PixivRankBot
                         case "path":
                             Console.ReadLine();
                             break;
+                    case "status":
+                        cmd.Status();
+                        break;
                     }
             }
 

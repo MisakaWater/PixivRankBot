@@ -14,5 +14,10 @@ namespace PixivRankBot
             Console.WriteLine("3.RankType :排行榜类型，参考 https://docs.rsshub.app/#pixiv");
             Console.WriteLine("4.Total :总数");
         }
+
+        public void Status()
+        {
+            Console.WriteLine("");
+        }
     }
 }
