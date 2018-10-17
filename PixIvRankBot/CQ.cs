@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PixivRankBot
 {
@@ -89,6 +92,51 @@ namespace PixivRankBot
 
 
             return ret;
+        }
+
+        /// <summary>
+        /// 依据酷Q进程寻找酷Q根目录
+        /// </summary>
+        /// <returns>酷Q根目录</returns>
+        public string RunTimePath()
+        {
+            var app = Process.GetProcesses();
+            Process item = null;
+            for (int i = 0; i < app.Length; i++)
+            {
+                item = app[i];
+                if (item.MainWindowTitle.IndexOf("酷Q") != -1 && item.MainModule.FileVersionInfo.Comments.IndexOf("酷Q") != -1)
+                {
+                    return item.MainModule.FileName.Replace(item.MainModule.ModuleName,"");
+                }
+            }
+            return null;
+        }
+
+        public string GetHttpApiConfig(string Path, string FileName="", string Key="port")
+        {
+            
+            Path = string.Format("{0}{1}", Path, "app\\io.github.richardchien.coolqhttpapi\\config\\");
+            
+            if (FileName == "")
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path);
+                FileInfo[] files = directoryInfo.GetFiles();
+                Path = Path + files[0];
+            }
+            else
+            {
+                Path = Path + FileName;
+            }
+            
+            if (Directory.Exists(Path))//找cq配置文件目录
+            {
+                StreamReader file = File.OpenText(Path);
+                JObject jObject = JObject.Parse(file.ReadToEnd());
+                return (string)jObject[Key];
+
+            }
+            return null;//此处应用户输入正确的path
         }
 
     }
