@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//string path变量有bug 使用Path就好
+
+
+
 namespace PixivRankBot
 {
     class Main
     {
+        public string Path
+        {
+            get
+            {
+                CQ cq = new CQ();
+                return cq.RunTimePath() + "data\\image";
+            }
+        }
         public bool InfoFlg = true;
         public void Start(string[] args)
         {
@@ -20,8 +32,7 @@ namespace PixivRankBot
             Init init = new Init();
             CQ cq = new CQ();
             Api api = new Api();
-            var StartInfoList = new List<string>();
-            StartInfoList = init.AppInfo(args);//获取启动参数
+            var StartInfoList = new List<string>(init.AppInfo(args));//获取启动参数
 
 
 
@@ -200,7 +211,7 @@ namespace PixivRankBot
                     ApiIdList = api.HtmlPixivRank(RankType);
                     break;
             }
-            if (ApiIdList.Count > 1)//如果ApiV2返回不为空
+            if (ApiIdList != null)//如果Api返回不为空
             {
                 bool totalflg1 = true;
 
@@ -244,11 +255,11 @@ namespace PixivRankBot
                     {
                         url = other.PixivCat(ApiIdList[i]);
                         Console.WriteLine(i + "\r\n" + url);
-                        name = other.DownloadImg(url, path: path);
+                        name = other.DownloadImg(url, path: Path);
                         Delname.Add(name);
                         code = other.CqCodeMsg("image", "file", name);
-                        count.Add("id=" + ApiIdList[i] + "");
                         count.Add(code);
+                        count.Add("\r\nid=" + ApiIdList[i] + "\r\n");
                     }
 
                     Console.WriteLine("Img Start");
@@ -259,19 +270,21 @@ namespace PixivRankBot
                 }
                 else
                 {
+
+
                     for (int i = 0; i < total; i++)
                     {
                         url = other.PixivCat(ApiIdList[i]);
                         Console.WriteLine(i + "\r\n" + url);
-                        name = other.DownloadImg(url, path: path);
+                        name = other.DownloadImg(url, path: Path);
                         Delname.Add(name);
                         code = other.CqCodeMsg("image", "file", name);
-                        count.Add("\\nid=" + ApiIdList[i] + "\\n");
-                        count.Add(code);
+                        count.Add("\r\n" + code);
+                        count.Add("\r\nid=" + ApiIdList[i]);
                     }
 
                     Console.WriteLine("Img Start");
-                    count.Add("\\nEND Count:" + total);
+                    count.Add("\nEND Count:" + total);
                     code = string.Concat(count.ToArray());
 
                     cq.HttpSendMsg(type, id, code, get: false);
@@ -286,11 +299,15 @@ namespace PixivRankBot
                 other.Wait(10);
                 foreach (var item in Delname)
                 {
-                    other.DelFile(item, path);
+                    other.DelFile(item, Path);
                 }
 
 
             }
+            else {
+                return;
+            }
+
         }
     }
 

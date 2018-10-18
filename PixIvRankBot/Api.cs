@@ -199,19 +199,19 @@ namespace PixivRankBot
             {
                 Console.WriteLine(ex);
                 ret.Add(ex.ToString());
-                throw;
+                return null;
             }
             catch (StackOverflowException ex)
             {
                 Console.WriteLine(ex);
                 ret.Add(ex.ToString());
-                throw;
+                return null;
             }
             catch (HttpListenerException ex)
             {
                 Console.WriteLine(ex);
                 ret.Add(ex.ToString());
-                throw;
+                return null;
             }
 
 
@@ -263,8 +263,7 @@ namespace PixivRankBot
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
-                    return ret;
-                    throw;
+                    return null;
                 }
 
             }

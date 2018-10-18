@@ -131,8 +131,8 @@ namespace PixivRankBot
                     HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
                     StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
                     string content = reader.ReadToEnd();
-                    Console.WriteLine("Seed\\n" + postObj);
-                    Console.WriteLine("Return\\n" + content);
+                    Console.WriteLine("Seed:\r\n" + postObj);
+                    Console.WriteLine("Return:\r\n" + content);
                 }
                 catch (WebException ex)
                 {

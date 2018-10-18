@@ -84,8 +84,21 @@ namespace PixivRankBot
             //接收POST参数
             Stream stream = ctx.Request.InputStream;
             StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8);
-            GetMsgType("", reader.ReadToEnd());
-
+            var json = reader.ReadToEnd();
+            var User = ParsePost("user_id", json);
+            var Msg = ParsePost("message", json);
+            var MsgType = ParsePost("message_type", json);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("[");
+            Console.Write(MsgType);
+            Console.Write("]");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(User);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(":");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(Msg+"\r\n");
+            Console.ForegroundColor = ConsoleColor.White;
             ;
             
         }
@@ -96,7 +109,7 @@ namespace PixivRankBot
         /// <param name="json">传入json</param>
         /// <param name="key">Json中的Key</param>
         /// <returns>key对应的值</returns>
-        string GetMsgType(string key,string Json)
+        string ParsePost(string key,string Json)
         {
             JObject jObject = JObject.Parse(Json);
             if ((string)jObject["post_type"] == "message")

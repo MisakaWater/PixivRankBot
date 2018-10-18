@@ -3,16 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Timers;
 
 namespace PixivRankBot
 {
-    class tmpPath
-    {
-        public static string temp = Environment.GetEnvironmentVariable("TEMP");
-    }
-
     class Other
     {
+        public string temp = Environment.GetEnvironmentVariable("TEMP");
+
         /// <summary>
         /// 将传入参数转换为CQ代码
         /// </summary>
@@ -119,7 +117,7 @@ namespace PixivRankBot
 
             if (path == "")
             {
-                path = string.Format("{0}{1}{2}", tmpPath.temp, @"\", name);
+                path = string.Format("{0}{1}{2}", temp, @"\", name);
             }
             else
             {
@@ -186,7 +184,5 @@ namespace PixivRankBot
                 }
             }
         }
-
-
     }
 }
