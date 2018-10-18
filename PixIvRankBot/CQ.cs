@@ -88,7 +88,7 @@ namespace PixivRankBot
             {
                 if (!AutoEscape)
                 {
-                    Message = System.Web.HttpUtility.UrlEncode(Message, System.Text.Encoding.UTF8);
+                    Message = System.Web.HttpUtility.UrlEncode(Message, Encoding.UTF8);
                 }
                 string url;
                 if (Host == "0.0.0.0" && Host == "127.0.0.1")
@@ -113,12 +113,13 @@ namespace PixivRankBot
                     postObj["message_type"] = MessageType;
                     postObj[IdType] = Id;
                     postObj["message"] = Message;
-                    postObj["auto_escape"]= AutoEscape.ToString()
+                    postObj["auto_escape"] = AutoEscape.ToString();
 
 
-                    string postData = "{ \"message_type\": \"" + MessageType + "\",\"" + IdType + "\": " + Id + ",\"message\":\"" + Message + "\",\"auto_escape\":\"" + AutoEscape.ToString() + "\"}";
-                    byte[] data = Encoding.UTF8.GetBytes(postData);
-                    string api = string.Format("{0}{1}",HostPost,"/send_msg");
+
+                    //string postData = "{ \"message_type\": \"" + MessageType + "\",\"" + IdType + "\": " + Id + ",\"message\":\"" + Message + "\",\"auto_escape\":\"" + AutoEscape.ToString() + "\"}";
+                    byte[] data = Encoding.UTF8.GetBytes(postObj.ToString());
+                    string api = string.Format("{0}{1}",HostPost,"send_msg");
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api);
                     request.Method = "POST";
                     request.ContentType = "application/json; charset=UTF-8";
@@ -130,8 +131,8 @@ namespace PixivRankBot
                     HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
                     StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
                     string content = reader.ReadToEnd();
-                    Console.WriteLine(content);
-                    Console.WriteLine(postData);
+                    Console.WriteLine("Seed\\n" + postObj);
+                    Console.WriteLine("Return\\n" + content);
                 }
                 catch (WebException ex)
                 {

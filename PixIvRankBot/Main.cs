@@ -247,12 +247,12 @@ namespace PixivRankBot
                         name = other.DownloadImg(url, path: path);
                         Delname.Add(name);
                         code = other.CqCodeMsg("image", "file", name);
-                        count.Add("\\nid=" + ApiIdList[i] + "\\n");
+                        count.Add("id=" + ApiIdList[i] + "");
                         count.Add(code);
                     }
 
                     Console.WriteLine("Img Start");
-                    count.Add("\\nEND Count:" + ApiIdList.Count);
+                    count.Add("END Count:" + ApiIdList.Count);
                     code = string.Concat(count.ToArray());
 
                     cq.HttpSendMsg(type, id, code, get: false);

@@ -13,10 +13,15 @@ namespace PixivRankBot
         /// Gets the j object.
         /// </summary>
         /// <returns></returns>
-        public JObject GetJObject()
+        public void GetJObject()
         {
-            var obj = new JObject { { "Name", "Mark" } };
-            return obj;
+            JObject postObj = new JObject();
+            postObj["message_type"] = "MessageType";
+            postObj[""] = "Id";
+            postObj["message"] = "Message";
+            postObj["auto_escape"] = "AutoEscape.ToString()";
+            var a =postObj.ToString();
+            ;
         }
 
 

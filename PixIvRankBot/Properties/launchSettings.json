@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PixivRankBot": {
+      "commandName": "Project",
+      "commandLineArgs": "-Path C:\\Users\\Administrator\\Desktop\\cqpro\\data\\image -Type group -id 786340409 -ranktype day -total 4 -api HtmlApi"
+    }
+  }
+}
