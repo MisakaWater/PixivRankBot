@@ -119,7 +119,7 @@ namespace PixivRankBot
 
                     //string postData = "{ \"message_type\": \"" + MessageType + "\",\"" + IdType + "\": " + Id + ",\"message\":\"" + Message + "\",\"auto_escape\":\"" + AutoEscape.ToString() + "\"}";
                     byte[] data = Encoding.UTF8.GetBytes(postObj.ToString());
-                    string api = string.Format("{0}{1}",HostPost,"send_msg");
+                    string api = string.Format("{0}{1}", HostPost, "send_msg");
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api);
                     request.Method = "POST";
                     request.ContentType = "application/json; charset=UTF-8";
@@ -147,6 +147,31 @@ namespace PixivRankBot
             return ret;
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="UserId">指定的QQ号</param>
+        /// <param name="Cache">是否使用缓存，默认false</param>
+        /// <returns>返回 QQ 号，昵称，性别，年龄，具体参考https://cqhttp.cc/docs/4.5/#/API?id=get_stranger_info-获取陌生人信息</returns>
+        public JObject GetUserInfo(int UserId, bool Cache = false)
+        {
+            WebClient wc = new WebClient();
+            string url = string.Format("{0}{1}{2}{3}{4}{5}", HostPost, "get_stranger_info?user_id=", UserId, "&", "no_cache=", Cache.ToString());
+            Uri uri = new Uri(url);
+            JObject jObject = new JObject();
+            try
+            {
+                return JObject.Parse(wc.DownloadString(uri));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+
+
+        }
+
 
 
         /// <summary>
@@ -162,17 +187,17 @@ namespace PixivRankBot
                 item = app[i];
                 if (item.MainWindowTitle.IndexOf("酷Q") != -1 && item.MainModule.FileVersionInfo.Comments.IndexOf("酷Q") != -1)
                 {
-                    return item.MainModule.FileName.Replace(item.MainModule.ModuleName,"");
+                    return item.MainModule.FileName.Replace(item.MainModule.ModuleName, "");
                 }
             }
             return null;
         }
 
-        public string GetHttpApiConfig(string Path, string FileName="", string Key="port")
+        public string GetHttpApiConfig(string Path, string FileName = "", string Key = "port")
         {
-            
+
             Path = string.Format("{0}{1}", Path, "app\\io.github.richardchien.coolqhttpapi\\config\\");
-            
+
             if (FileName == "")
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(Path);
@@ -183,7 +208,7 @@ namespace PixivRankBot
             {
                 Path = Path + FileName;
             }
-            
+
             if (File.Exists(Path))//找cq配置文件
             {
                 StreamReader file = File.OpenText(Path);
@@ -203,7 +228,7 @@ namespace PixivRankBot
         /// <param name="Key">修改的Key</param>
         /// <param name="Value">修改的值</param>
         /// <returns></returns>
-        public string SetHttpApiConfig(string Path, string FileName = "", string Key = "port",string Value="")
+        public string SetHttpApiConfig(string Path, string FileName = "", string Key = "port", string Value = "")
         {
 
             Path = string.Format("{0}{1}", Path, "app\\io.github.richardchien.coolqhttpapi\\config\\");

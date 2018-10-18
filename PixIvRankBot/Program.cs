@@ -19,8 +19,8 @@ namespace PixivRankBot
 
             //    main.Start(args);
             //}
+            monitor.MonitorInit();
 
-            
 
             while (true)
             {
@@ -47,6 +47,10 @@ namespace PixivRankBot
                         break;
 
                     case "set start time":
+                        break;
+
+                    case "clear":
+                        Console.Clear();
                         break;
 
                     case "":

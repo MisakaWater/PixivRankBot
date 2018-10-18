@@ -11,13 +11,14 @@ namespace PixivRankBot
 {
     class Monitor
     {
+        CQ cq = new CQ();
         /// <summary>
         /// 初始化监听器
         /// </summary>
         public async void MonitorInit()
         {
             Console.WriteLine("MonitorInit()");
-            CQ cq = new CQ();
+
 
             string Path = cq.RunTimePath();
             string post_url;
@@ -85,22 +86,7 @@ namespace PixivRankBot
             Stream stream = ctx.Request.InputStream;
             StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8);
             var json = reader.ReadToEnd();
-            var User = ParsePost("user_id", json);
-            var Msg = ParsePost("message", json);
-            var MsgType = ParsePost("message_type", json);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[");
-            Console.Write(MsgType);
-            Console.Write("]");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(User);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(":");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write(Msg+"\r\n");
-            Console.ForegroundColor = ConsoleColor.White;
-            ;
-            
+            ParsePost(json,true);
         }
 
         /// <summary>
@@ -109,17 +95,61 @@ namespace PixivRankBot
         /// <param name="json">传入json</param>
         /// <param name="key">Json中的Key</param>
         /// <returns>key对应的值</returns>
-        string ParsePost(string key,string Json)
-        {
+        string ParsePost(string Json,bool Write, string key="")
+        { 
             JObject jObject = JObject.Parse(Json);
-            if ((string)jObject["post_type"] == "message")
-            {
-                return (string)jObject[key];
-            }
-            return null;
 
+            if (Write)
+            {
+                switch (jObject["post_type"].ToString())
+                {
+                    case "message":
+                        WriteMessage(jObject);
+                        break;
+                }
+                
+            }
+
+            if (key == "")
+            {
+                return null;
+            }
+            return (string)jObject[key];
         }
 
+
+        void WriteMessage(JObject jObject)
+        {
+            var DefForegroundColor = Console.ForegroundColor;
+            var nickname  = cq.GetUserInfo((int)jObject["user_id"])["data"]["nickname"];
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("[");
+            Console.Write(jObject["message_type"]);
+            if (jObject["sub_type"] != null)//子类型
+            {
+                Console.Write("(");
+                Console.Write(jObject["sub_type"]);
+                Console.Write(")");
+            }
+            Console.Write("]");//[message_type(sub_type)]
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(nickname);
+            Console.Write("<");
+            Console.Write(jObject["user_id"]);
+            Console.Write(">");//昵称<QQ号>
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("=>");
+            Console.Write(jObject["message"]);
+            Console.Write("\r\n");
+            //[message_type(sub_type)]昵称<QQ号>=>消息
+
+            Console.ForegroundColor = DefForegroundColor;
+
+
+        }
 
         public List<int> GetGroupAdmin()
         {
