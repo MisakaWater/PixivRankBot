@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -83,7 +84,10 @@ namespace PixivRankBot
             //接收POST参数
             Stream stream = ctx.Request.InputStream;
             StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8);
-            string body = reader.ReadToEnd();
+            GetMsgType("", reader.ReadToEnd());
+
+            ;
+            
         }
 
         /// <summary>
@@ -95,7 +99,18 @@ namespace PixivRankBot
         string GetMsgType(string key,string Json)
         {
             JObject jObject = JObject.Parse(Json);
-            return (string)jObject[key];
+            if ((string)jObject["post_type"] == "message")
+            {
+                return (string)jObject[key];
+            }
+            return null;
+
+        }
+
+
+        public List<int> GetGroupAdmin()
+        {
+            return null;
         }
     }
 }

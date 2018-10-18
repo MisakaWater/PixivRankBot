@@ -9,19 +9,16 @@ namespace PixivRankBot
 {
     class test
     {
-        public string HttpApiConfig(string Path, string FileName, string Key)
+        /// <summary>
+        /// Gets the j object.
+        /// </summary>
+        /// <returns></returns>
+        public JObject GetJObject()
         {
-
-            Path = string.Format("{0}{1}{2}", Path, "app\\io.github.richardchien.coolqhttpapi\\config\\", FileName);
-            if (Directory.Exists(Path))//找cq配置文件目录
-            {
-                StreamReader file = File.OpenText(Path);
-                JObject jObject = JObject.Parse(file.ReadToEnd());
-                return (string)jObject[Key];
-
-            }
-            return null;//此处应用户输入正确的path
+            var obj = new JObject { { "Name", "Mark" } };
+            return obj;
         }
+
 
     }
 }

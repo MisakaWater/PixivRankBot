@@ -21,7 +21,7 @@ namespace PixivRankBot
             CQ cq = new CQ();
             Api api = new Api();
             var StartInfoList = new List<string>();
-            StartInfoList = init.Info(args);//获取启动参数
+            StartInfoList = init.AppInfo(args);//获取启动参数
 
 
 

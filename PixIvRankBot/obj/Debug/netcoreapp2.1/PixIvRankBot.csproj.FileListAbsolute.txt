@@ -33,3 +33,5 @@ C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netc
 C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netcoreapp2.1\PixIvRankBot.pdb
 C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netcoreapp2.1\PixivRankBot.Properties.Resources.resources
 C:\Users\Misak\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netcoreapp2.1\PixivRankBot.csproj.GenerateResource.cache
+C:\Users\Administrator\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netcoreapp2.1\PixivRankBot.Properties.Resources.resources
+C:\Users\Administrator\Source\Repos\MisakaWater\PixivRankBot\PixIvRankBot\obj\Debug\netcoreapp2.1\PixivRankBot.csproj.GenerateResource.cache

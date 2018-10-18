@@ -6,6 +6,10 @@ namespace PixivRankBot
     {
         static void Main(string[] args)
         {
+            CQ cq = new CQ();
+            test test = new test();
+            test.GetJObject();
+
             Other other = new Other();
             cmd cmd = new cmd();
             Main main = new Main();

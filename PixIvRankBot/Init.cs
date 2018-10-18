@@ -17,7 +17,7 @@ namespace PixivRankBot
         /// [3]=RankType
         /// [4]=Total
         /// [5]=ApiType
-        public List<string> Info(string[] args)
+        public List<string> AppInfo(string[] args)
         {
             Console.WriteLine("Init.Info()");
             cmd cmd = new cmd();
@@ -103,5 +103,8 @@ namespace PixivRankBot
 
             return ret;
         }
+
+
+
     }
 }
