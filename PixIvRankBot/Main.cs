@@ -18,7 +18,15 @@ namespace PixivRankBot
             }
         }
         public bool InfoFlg = true;
-        public void Start(string[] args)
+
+
+        public string Type { get; set; }
+        public string Id { get; set; }
+        public string RankType { get; set; }
+        public string Total { get; set; }
+        public string Api { get; set; }
+
+        public void Init(string[] args)
         {
             Other other = new Other();
 
@@ -32,7 +40,7 @@ namespace PixivRankBot
             Init init = new Init();
             CQ cq = new CQ();
             Api api = new Api();
-            var StartInfoList = new List<string>(init.AppInfo(args));//获取启动参数
+            var StartInfoList = new List<string>(init.StartAppInfo(args));//获取启动参数
 
 
 
@@ -211,6 +219,7 @@ namespace PixivRankBot
                     ApiIdList = api.HtmlPixivRank(RankType);
                     break;
             }
+
             if (ApiIdList != null)//如果Api返回不为空
             {
                 bool totalflg1 = true;
@@ -241,72 +250,77 @@ namespace PixivRankBot
                         totalflg1 = true;
                 }
 
+            }
+        }
 
 
-                string name = string.Empty;
-                string code = string.Empty;
-                string url = string.Empty;
-                var count = new List<string>();
-                var Delname = new List<string>();
-                count.Add("Img Start Date:" + DateTime.Now.ToString("yyyy-MM-dd"));
-                if (!totalflg1)
+
+        public void Start(bool totalflg1, List<string> ApiIdList, int total)
+        {
+
+            Other other = new Other();
+            CQ cq = new CQ();
+
+            string name = string.Empty;
+            string code = string.Empty;
+            string url = string.Empty;
+            var count = new List<string>();
+            var Delname = new List<string>();
+            count.Add("Img Start Date:" + DateTime.Now.ToString("yyyy-MM-dd"));
+            if (!totalflg1)
+            {
+                for (int i = 0; i < ApiIdList.Count; i++)
                 {
-                    for (int i = 0; i < ApiIdList.Count; i++)
-                    {
-                        url = other.PixivCat(ApiIdList[i]);
-                        Console.WriteLine(i + "\r\n" + url);
-                        name = other.DownloadImg(url, path: Path);
-                        Delname.Add(name);
-                        code = other.CqCodeMsg("image", "file", name);
-                        count.Add(code);
-                        count.Add("\r\nid=" + ApiIdList[i] + "\r\n");
-                    }
-
-                    Console.WriteLine("Img Start");
-                    count.Add("END Count:" + ApiIdList.Count);
-                    code = string.Concat(count.ToArray());
-
-                    cq.HttpSendMsg(type, id, code, get: false);
-                }
-                else
-                {
-
-
-                    for (int i = 0; i < total; i++)
-                    {
-                        url = other.PixivCat(ApiIdList[i]);
-                        Console.WriteLine(i + "\r\n" + url);
-                        name = other.DownloadImg(url, path: Path);
-                        Delname.Add(name);
-                        code = other.CqCodeMsg("image", "file", name);
-                        count.Add("\r\n" + code);
-                        count.Add("\r\nid=" + ApiIdList[i]);
-                    }
-
-                    Console.WriteLine("Img Start");
-                    count.Add("\nEND Count:" + total);
-                    code = string.Concat(count.ToArray());
-
-                    cq.HttpSendMsg(type, id, code, get: false);
-
-
+                    url = other.PixivCat(ApiIdList[i]);
+                    Console.WriteLine(i + "\r\n" + url);
+                    name = other.DownloadImg(url, path: Path);
+                    Delname.Add(name);
+                    code = other.CqCodeMsg("image", "file", name);
+                    count.Add(code);
+                    count.Add("\r\nid=" + ApiIdList[i] + "\r\n");
                 }
 
+                Console.WriteLine("Img Start");
+                count.Add("END Count:" + ApiIdList.Count);
+                code = string.Concat(count.ToArray());
 
-                Console.WriteLine("END");
-                Console.WriteLine(DateTime.Now.ToString());
+                //cq.HttpSendMsg(type, id, code, get: false);
+            }
+            else
+            {
 
-                other.Wait(10);
-                foreach (var item in Delname)
+
+                for (int i = 0; i < total; i++)
                 {
-                    other.DelFile(item, Path);
+                    url = other.PixivCat(ApiIdList[i]);
+                    Console.WriteLine(i + "\r\n" + url);
+                    name = other.DownloadImg(url, path: Path);
+                    Delname.Add(name);
+                    code = other.CqCodeMsg("image", "file", name);
+                    count.Add("\r\n" + code);
+                    count.Add("\r\nid=" + ApiIdList[i]);
                 }
+
+                Console.WriteLine("Img Start");
+                count.Add("\nEND Count:" + total);
+                code = string.Concat(count.ToArray());
+
+                //cq.HttpSendMsg(type, id, code, get: false);
 
 
             }
-            else {
-                return;
+
+
+            Console.WriteLine("END");
+            Console.WriteLine(DateTime.Now.ToString());
+
+            other.Wait(10);
+            foreach (var item in Delname)
+            {
+                other.DelFile(item, Path);
             }
+
+            return;
 
         }
     }

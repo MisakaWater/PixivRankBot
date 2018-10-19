@@ -32,7 +32,7 @@ namespace PixivRankBot
                 post_url = cq.GetHttpApiConfig(Path, Key: "post_url");
             }
 
-            if (post_url == null)
+            if (post_url == "")
             {
                 Console.WriteLine("请设置HttpApi的Post_Url，配置文件位于:CQ根目录\\app\\io.github.richardchien.coolqhttpapi\\config\\登陆的QQ号.json");
                 return;
@@ -96,8 +96,16 @@ namespace PixivRankBot
         /// <param name="key">Json中的Key</param>
         /// <returns>key对应的值</returns>
         string ParsePost(string Json,bool Write, string key="")
-        { 
-            JObject jObject = JObject.Parse(Json);
+        {
+            JObject jObject;
+            try
+            {
+                jObject = JObject.Parse(Json);
+            }catch(Exception ex)
+            {
+                return ex.ToString();
+            }
+
 
             if (Write)
             {

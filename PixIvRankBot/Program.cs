@@ -4,6 +4,7 @@ namespace PixivRankBot
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             CQ cq = new CQ();
@@ -19,27 +20,27 @@ namespace PixivRankBot
 
             //    main.Start(args);
             //}
+
             monitor.MonitorInit();
 
-
+            string Put;
             while (true)
             {
-                switch (Console.ReadLine())
+                switch (Console.ReadLine().ToLower())
                 {
+
                     case "exit":
                         return;
 
                     case "help":
                         cmd.Help();
                         break;
-                    case "path":
-                        Console.ReadLine();
-                        break;
+
                     case "status":
                         cmd.Status();
                         break;
                     case "start":
-                        main.Start(args);
+                        main.Init(args);
                         break;
 
                     case "monitor":
@@ -54,6 +55,60 @@ namespace PixivRankBot
                         break;
 
                     case "":
+                        break;
+
+
+
+
+                    case "type":
+                        Console.Write("(输入:q退出)Put Type ");
+                        Put = Console.ReadLine();
+                        if (Put != "" && Put != ":q")
+                        {
+                            main.Type = Console.ReadLine();
+                            Console.WriteLine("Now Type= " + main.Type);
+                        }
+                        break;
+                    case "Id":
+                        Console.Write("(输入:q退出)Put Id ");
+                        Put = Console.ReadLine();
+                        if (Put != "" && Put != ":q")
+                        {
+                            main.Id = Console.ReadLine();
+                            Console.WriteLine("Now Id= " + main.Id);
+                        }
+                        break;
+
+                    case "RankType":
+                        Console.Write("(输入:q退出)Put RankType ");
+                        Put = Console.ReadLine();
+                        if (Put != "" && Put != ":q")
+                        {
+                            main.RankType = Console.ReadLine();
+                            Console.WriteLine("Now RankType= " + main.RankType);
+                        }
+                        break;
+                    case "Total":
+                        Console.Write("(输入:q退出)Put Total ");
+                        Put = Console.ReadLine();
+                        if (Put != "" && Put != ":q")
+                        {
+                            main.Total = Console.ReadLine();
+                            Console.WriteLine("Now Total= " + main.Total);
+                        }
+                        break;
+                    case "Api":
+                        Console.Write("(输入:q退出)Put Api ");
+                        Put = Console.ReadLine();
+                        if (Put != "" && Put != ":q")
+                        {
+                            main.Api = Console.ReadLine();
+                            Console.WriteLine("Now Api= " + main.Api);
+                        }
+                        break;
+
+                    case "path":
+                        Console.ReadLine();
                         break;
                 }
             }

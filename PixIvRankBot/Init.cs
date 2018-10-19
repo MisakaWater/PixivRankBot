@@ -5,7 +5,6 @@ namespace PixivRankBot
 {
     class Init
     {
-
         /// <summary>
         /// 获取应用参数
         /// </summary>
@@ -17,10 +16,11 @@ namespace PixivRankBot
         /// [3]=RankType
         /// [4]=Total
         /// [5]=ApiType
-        public string[] AppInfo(string[] args)
+        public string[] StartAppInfo(string[] args)
         {
             Console.WriteLine("Init.Info()");
             cmd cmd = new cmd();
+            Program program = new Program();
             //var ret = new List<string>();
             string[] Strret = new string[6];
 
@@ -43,6 +43,7 @@ namespace PixivRankBot
                         case "-path":
                             //ret.Add(args[i + 1]);
                             Strret[0] = args[i + 1];
+                            
                             break;
                         case "-Path":
                             //ret.Add(args[i + 1]);
