@@ -5,6 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Xml;
 using HtmlAgilityPack;
+using System.Drawing;
+using Colorful;
+using Console = Colorful.Console;
+using Newtonsoft.Json;
 
 namespace PixivRankBot
 {
@@ -16,9 +20,9 @@ namespace PixivRankBot
         /// <param name="mode">排行榜类型，类型有:参考https://docs.rsshub.app/#pixiv</param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<string> ApiV1PixivRank(string content = "illust", string mode = "daily")//, string date = "")
+        public List<string> ApiV1PixivRank(string content = "illust", string mode = "daily", bool Pics = false)//, string date = "")
         {
-            Console.WriteLine("ApiV1PixivRank()");
+            Console.WriteLine("ApiV1PixivRank()",Color.Yellow);
 
             var ret = new List<string>();
 
@@ -38,62 +42,55 @@ namespace PixivRankBot
             }
             catch (WebException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(),Color.Red);
                 ret.Add(ex.ToString());
                 return ret;
                 throw;
             }
 
             JObject js = JObject.Parse(json);
-
-            foreach (var itme in js)
+            int PageCount = -1;
+            for (int i = 0; i < js["response"][0]["works"].Count(); i++)
             {
-                if (itme.Key.ToString() == "response")
+                PageCount = (int)js["response"][0]["works"][i]["work"]["page_count"];
+                if (PageCount > 1)
                 {
-                    var t = itme.Value;
+                    if (Pics) {
+                        for (int i1 = 0; i1 < PageCount; i1++)
+                        {
+                            ret.Add(string.Format("{0}{1}{2}", (string)js["response"][0]["works"][i]["work"]["id"], "-", i1));
+                        }
+                    }
+                    else
+                    {
+                        ret.Add(string.Format("{0}{1}{2}", (string)js["response"][0]["works"][i]["work"]["id"], "-", "1"));
+                    }
                 }
-
+                else
+                {
+                    ret.Add((string)js["response"][0]["works"][i]["work"]["id"]);
+                }
             }
 
-            //var works = response["works"];
+            string a = (string)js["response"][0]["works"][0]["rank"];
 
-
-            //try
-            //{
-            //    results = JsonConvert.DeserializeObject<List<TestTag>>(strJson);
-
-            //}
-            //catch(ArgumentException ex)
-            //{
-            //    ret.Add(ex.ToString());
-            //    return ret;
-            //    throw;
-            //}
-            //catch (NullReferenceException ex)
-            //{
-            //    ret.Add(ex.ToString());
-            //    return ret;
-            //    throw;
-            //}
-            //for (int i = 0; i < results.Count; i++)
-            //{
-            //    ret.Add(results[i].First.First.ToString());
-            //}
-
+            //JArray jArray = (JArray)js["response"];
+            //JArray works = (JArray)jArray["works"];
+            
             return ret;
         }
 
 
 
         /// <summary>
-        /// 通过RssHub.app获取Pixiv图片信息
+        /// 通过RssHub.app获取Pixiv图片信息,不怎么想用。。就不写了
         /// </summary>
         /// <param name="mode">排行榜类型</param>
         /// <param name="date">日期, 取值形如 2018-4-25</param>
         /// <returns></returns>
-        public List<List<string>> RssPixivRank(string mode = "day", string date = "")
+        public List<List<string>> RssPixivRank(string mode = "day", string date = "", bool Pics = false)
         {
-            Console.WriteLine("RssPixivRank()");
+            Console.WriteLine("RssPixivRank()", Color.Yellow);
 
             if (date == "")
             {
@@ -111,7 +108,7 @@ namespace PixivRankBot
             }
             catch (WebException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(),Color.Red);
                 error.Add(ex.ToString());
                 ret.Add(error);
                 return ret;
@@ -119,7 +116,7 @@ namespace PixivRankBot
             }
             catch (NotSupportedException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(),Color.Red);
                 error.Add(ex.ToString());
                 ret.Add(error);
                 return ret;
@@ -176,10 +173,11 @@ namespace PixivRankBot
         /// </summary>
         /// <param name="mode">排行榜类型</param>
         /// <param name="content">图片类型</param>
+        /// <param name="Pics">是否返回图集</param>
         /// <returns></returns>
-        public List<string> HtmlPixivRank(string mode = "day",string content = "illust")
+        public List<string> HtmlPixivRank(string mode = "day",string content = "illust",bool Pics =false)
         {
-            Console.WriteLine("HtmlPixivRank()");
+            Console.WriteLine("HtmlPixivRank()", Color.Yellow);
             if (mode == "day")
             {
                 mode = "daily";
@@ -197,19 +195,19 @@ namespace PixivRankBot
             }
             catch (WebException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(),Color.Red);
                 ret.Add(ex.ToString());
                 return null;
             }
             catch (StackOverflowException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(),Color.Red);
                 ret.Add(ex.ToString());
                 return null;
             }
             catch (HttpListenerException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(), Color.Red);
                 ret.Add(ex.ToString());
                 return null;
             }
@@ -247,12 +245,18 @@ namespace PixivRankBot
                     ImgName = section.Attributes[10].Value;//获取图片名
                     if (itemTotal > 1)//如果是图片集则为true
                     {
+                        if (Pics) { 
                         for (int i1 = 1; i1 < itemTotal + 1; i1++)
                         {
                             ImgName = string.Format("{0}{1}{2}", section.Attributes[10].Value, "-", i1);
                             ret.Add(ImgName);
                         }
-
+                        }
+                        else
+                        {
+                            ImgName = string.Format("{0}{1}{2}", section.Attributes[10].Value, "-", "1");
+                            ret.Add(ImgName);
+                        }
 
                     }
                     else
@@ -262,7 +266,7 @@ namespace PixivRankBot
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(ex.ToString(), Color.Red);
                     return null;
                 }
 
@@ -279,9 +283,9 @@ namespace PixivRankBot
         /// <param name="mode">排行榜类型，类型有:参考https://docs.rsshub.app/#pixiv</param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public List<string> ApiV2PixivRank(string mode = "day")//, string date = "")
+        public List<string> ApiV2PixivRank(string mode = "day", bool Pics = false)//, string date = "")
         {
-            Console.WriteLine("ApiV2PixivRank()");
+            Console.WriteLine("ApiV2PixivRank()", Color.Yellow);
 
             var ret = new List<string>();
 
@@ -302,7 +306,7 @@ namespace PixivRankBot
             catch (WebException ex)
             {
                 ret.Add(ex.ToString());
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(), Color.Red);
                 return ret;
                 throw;
             }
@@ -317,7 +321,7 @@ namespace PixivRankBot
             catch (NullReferenceException ex)
             {
                 ret.Add(ex.ToString());
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(), Color.Red);
                 return ret;
                 throw;
             }
@@ -330,9 +334,17 @@ namespace PixivRankBot
                 {
                     if (results[i]["meta_pages"].Count() > 0)
                     {
-                        for (int i1 = 1; i1 < results[i]["meta_pages"].Count() + 1; i1++)
+                        if (Pics)
                         {
-                            name = string.Format("{0}{1}{2}", results[i].First.First.ToString(), "-", i1);
+                            for (int i1 = 1; i1 < results[i]["meta_pages"].Count() + 1; i1++)
+                            {
+                                name = string.Format("{0}{1}{2}", results[i].First.First.ToString(), "-", i1);
+                                ret.Add(name);
+                            }
+                        }
+                        else
+                        {
+                            name = string.Format("{0}{1}{2}", results[i].First.First.ToString(), "-", "1");
                             ret.Add(name);
                         }
                     }

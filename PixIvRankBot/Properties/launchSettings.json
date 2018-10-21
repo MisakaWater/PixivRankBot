@@ -2,7 +2,7 @@
   "profiles": {
     "PixivRankBot": {
       "commandName": "Project",
-      "commandLineArgs": "-api HtmlApi -Path C:\\Users\\Administrator\\Desktop\\cqpro\\data\\image -Type group -id 786340409 -ranktype day -total 4 "
+      "commandLineArgs": "-api ApiV1 -Path C:\\Users\\Administrator\\Desktop\\cqpro\\data\\image -Type group -id 786340409 -ranktype day -total 4 "
     }
   }
 }

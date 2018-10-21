@@ -5,6 +5,11 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
+using Colorful;
+using Console = Colorful.Console;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PixivRankBot
 {
@@ -46,6 +51,33 @@ namespace PixivRankBot
             set => SetHttpApiConfig(RunTimePath(), Key: "post_url", Value: value);
         }
 
+        /// <summary>
+        /// 酷Q登陆QQ的信息,获取速度较慢
+        /// </summary>
+        public JObject LogInInfo
+        {
+            get => LogInInfo;
+            set => LogInInfo = GetLogInInfo();
+        }
+
+        /// <summary>
+        /// 酷Q Config目录的第一个配置文件QQ号,可能获取到的不是登陆的QQ
+        /// </summary>
+        public int PathUserId
+        {
+            get => PathUserId;
+            set
+            {
+                string Path = RunTimePath();
+                Path = string.Format("{0}{1}", Path, "app\\io.github.richardchien.coolqhttpapi\\config\\");
+                DirectoryInfo directoryInfo = new DirectoryInfo(Path);
+                FileInfo[] files = directoryInfo.GetFiles();
+                if (files != null)
+                {
+                    PathUserId = int.Parse(files[0].Name);
+                }
+            }
+        }
 
         /// <summary>
         /// Http 发送消息
@@ -58,7 +90,7 @@ namespace PixivRankBot
         /// <returns></returns>
         public string HttpSendMsg(string MessageType, int Id = -1, string Message = "", bool AutoEscape = false, bool get = true)
         {
-            Console.WriteLine("SendMsg()");
+            Console.WriteLine("SendMsg()",Color.Yellow);
 
             string ret = string.Empty;
             string IdType = string.Empty;
@@ -110,13 +142,40 @@ namespace PixivRankBot
                 try
                 {
                     JObject postObj = new JObject();
+                    JArray jArray = new JArray();
                     postObj["message_type"] = MessageType;
                     postObj[IdType] = Id;
                     postObj["message"] = Message;
-                    postObj["auto_escape"] = AutoEscape.ToString();
 
+                    //TODO
+                    //重写发送消息格式 彻底转换成数组表示消息的json
+                    //JObject a1 = new JObject();
+                    //a1["type"] = "image";
+                    //JObject a11 = new JObject();
+                    //a11["file"] = "1.jpg";
+                    //a1["data"] = a11;
 
+                    //JObject a2 = new JObject();
+                    //a2["type"] = "text";
+                    //JObject a22 = new JObject();
+                    //a22["text"] = "\r\n";
+                    //a2["data"] = a22;
 
+                    //JObject a3 = new JObject();
+                    //a3["type"] = "image";
+                    //JObject a33 = new JObject();
+                    //a33["file"] = "2.jpg";
+                    //a3["data"] = a33;
+
+                    //jArray.Add(a1);
+                    //jArray.Add(a2);
+                    //jArray.Add(a3);
+                    //postObj["message"] = jArray;
+
+                    //postObj["auto_escape"] = AutoEscape.ToString();
+
+                    //var a = postObj.ToString();
+                    //;
                     //string postData = "{ \"message_type\": \"" + MessageType + "\",\"" + IdType + "\": " + Id + ",\"message\":\"" + Message + "\",\"auto_escape\":\"" + AutoEscape.ToString() + "\"}";
                     byte[] data = Encoding.UTF8.GetBytes(postObj.ToString());
                     string api = string.Format("{0}{1}", HostPost, "send_msg");
@@ -131,12 +190,12 @@ namespace PixivRankBot
                     HttpWebResponse myResponse = (HttpWebResponse)request.GetResponse();
                     StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
                     string content = reader.ReadToEnd();
-                    Console.WriteLine("Seed:\r\n" + postObj);
-                    Console.WriteLine("Return:\r\n" + content);
+                    Console.WriteLine("Seed:\r\n" + postObj,Color.Green);
+                    Console.WriteLine("Return:\r\n" + content, Color.Green);
                 }
                 catch (WebException ex)
                 {
-                    Console.WriteLine(ex);
+                    Console.WriteLine(ex.ToString(),Color.Red);
                     throw;
                 }
 
@@ -151,9 +210,9 @@ namespace PixivRankBot
         /// 获取用户信息
         /// </summary>
         /// <param name="UserId">指定的QQ号</param>
-        /// <param name="Cache">是否使用缓存，默认false</param>
+        /// <param name="Cache">是否使用缓存，默认true</param>
         /// <returns>返回 QQ 号，昵称，性别，年龄，具体参考https://cqhttp.cc/docs/4.5/#/API?id=get_stranger_info-获取陌生人信息</returns>
-        public JObject GetUserInfo(int UserId, bool Cache = false)
+        public JObject GetUserInfo(int UserId, bool Cache = true)
         {
             WebClient wc = new WebClient();
             string url = string.Format("{0}{1}{2}{3}{4}{5}", HostPost, "get_stranger_info?user_id=", UserId, "&", "no_cache=", Cache.ToString());
@@ -165,14 +224,63 @@ namespace PixivRankBot
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(), Color.Red);
                 return null;
             }
-
-
         }
 
+        /// <summary>
+        /// 获取酷Q登陆Q号的信息
+        /// </summary>
+        /// <returns></returns>
+        public JObject GetLogInInfo()
+        {
+            WebClient wc = new WebClient();
+            string url = string.Format("{0}{1}", HostPost, "/get_login_info");
+            Uri uri = new Uri(url);
+            JObject jObject = new JObject();
+            try
+            {
+                return JObject.Parse(wc.DownloadString(uri));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString(), Color.Red);
+                return null;
+            }
+        }
 
+        /// <summary>
+        /// 获取群管理员
+        /// </summary>
+        /// <param name="GroupId">群ID</param>
+        /// <returns>List<int>,管理员的QQ号</returns>
+        public List<int> GetGroupAdmin(int GroupId)
+        {
+            WebClient wc = new WebClient();
+            string GroupListUrl = string.Format("{0}{1}{2}", HostPost, "get_group_member_list?group_id=",GroupId);
+            Uri uri = new Uri(GroupListUrl);
+            JObject jObject = new JObject();
+            var AdminList = new List<int>();
+            try
+            {
+                var GroupList = new List<int>();
+                var GroupUserJObj =JObject.Parse(wc.DownloadString(uri));
+                for (int i = 0; i < GroupUserJObj["data"].Count(); i++)
+                {
+                    if ((string)GroupUserJObj["data"][i]["role"] == "admin")
+                    {
+                        AdminList.Add((int)GroupUserJObj["data"][i]["user_id"]);
+                    }
+                }
+                return AdminList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString(), Color.Red);
+                return null;
+            }
+        }
 
         /// <summary>
         /// 依据酷Q进程寻找酷Q根目录
@@ -258,5 +366,17 @@ namespace PixivRankBot
             return null;//此处应用户输入正确的path
         }
 
+
+        //public string Help()
+        //{
+        //    return "0.Path=>酷Q的根目录下 data\\image,自动获取酷Q运行目录" + "\r\n" +
+        //          "1.Type=>消息类型，private 为 qq 用户，group 为群，discuss 讨论组" + "\r\n" +
+        //          "2.ID=>发送对象的ID，private为 qq 号，group为群号，discuss 讨论组号" + "\r\n" +
+        //          "3.RankType=>排行榜类型，参考 https://docs.rsshub.app/#pixiv" + "\r\n" +
+        //          "4.Total=>总数" + "\r\n" +
+        //          "5.ApiType=>ApiV1,ApiV2,HtmlApi";
+        //}
+
+        
     }
 }

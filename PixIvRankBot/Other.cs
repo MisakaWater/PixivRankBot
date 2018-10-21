@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Timers;
+using System.Drawing;
+using Colorful;
+using Console = Colorful.Console;
 
 namespace PixivRankBot
 {
     class Other
     {
-        public string temp = Environment.GetEnvironmentVariable("TEMP");
+        public string temp { get => Environment.GetEnvironmentVariable("TEMP"); }
 
         /// <summary>
         /// 将传入参数转换为CQ代码
@@ -20,7 +23,7 @@ namespace PixivRankBot
         /// <returns></returns>
         public string CqCodeMsg(string Type, string Key, string Value, bool enter = false)
         {
-            Console.WriteLine("CqCodeMsg()");
+            Console.WriteLine("CqCodeMsg()",Color.Yellow);
             //var TypeList = new List<string>();
 
 
@@ -55,7 +58,7 @@ namespace PixivRankBot
         /// <returns></returns>
         public List<string> HtmlPParser(string HtmlCode)
         {
-            Console.WriteLine("HtmlParser()");
+            Console.WriteLine("HtmlParser()",  Color.Yellow);
             var ret = new List<string>();
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(HtmlCode);
@@ -74,7 +77,7 @@ namespace PixivRankBot
         /// <returns></returns>
         public List<string> HtmlSrcParser(string HtmlCode)
         {
-            Console.WriteLine("HtmlParser()");
+            Console.WriteLine("HtmlParser()", Color.Yellow);
             var ret = new List<string>();
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(HtmlCode);
@@ -94,7 +97,7 @@ namespace PixivRankBot
         /// <returns></returns>
         public string PixivCat(string id, string format = ".jpg")
         {
-            Console.WriteLine("PixivCat()");
+            Console.WriteLine("PixivCat()", Color.Yellow);
 
             return string.Format("{0}{1}{2}", "https://pixiv.cat/", id, format);
         }
@@ -108,7 +111,8 @@ namespace PixivRankBot
         /// <returns></returns>
         public string DownloadImg(string url, string name = "", string path = "")
         {
-            Console.WriteLine("DownloadImg()");
+
+            Console.WriteLine("DownloadImg()",Color.Yellow);
 
             if (name == "")
             {
@@ -142,7 +146,7 @@ namespace PixivRankBot
             }
             catch (WebException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.ToString(), Color.Yellow);
                 return ex.ToString();
                 throw;
             }
@@ -156,7 +160,7 @@ namespace PixivRankBot
         /// <param name="path">路径</param>
         public void DelFile(string name = "", string path = "")
         {
-            Console.WriteLine("DelFile()");
+            Console.WriteLine("DelFile()", Color.Yellow);
             string Dpath = string.Format("{0}{1}{2}", path, "\\", name.ToString());
             System.IO.File.Delete(Dpath);
         }
@@ -168,7 +172,7 @@ namespace PixivRankBot
         /// <param name="s">延时多少秒</param>
         public void Wait(int s)
         {
-            Console.WriteLine("Wait("+s+")");
+            Console.WriteLine("Wait("+s+")", Color.Yellow);
             DateTime t1, t2;
             long a;
             bool flg = true;
